@@ -1,0 +1,5 @@
+.env
+*~
+*.sw[op]
+.secrets
+.vagrant
