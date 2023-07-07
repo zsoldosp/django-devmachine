@@ -165,24 +165,7 @@ Vagrant.configure("2") do |config|
   USER_DOT_CONFIG
 
   config.vm.provision "shell", privileged: false, env: { "DOT_PROFILE" => DOT_PROFILE }, inline: <<-SOURCE_CODE
-    set -uex
-    # pip for pre commit, 3.11 to run pre commit hooks
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install software-properties-common --yes
-    sudo DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:deadsnakes/ppa --yes
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install python3-pip python3.11 --yes
-    sudo DEBIAN_FRONTEND=noninteractive add-apt-repository --remove ppa:deadsnakes/ppa --yes
-    pip install pre-commit
-    # vue deps
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-    ACCOUNT=zsoldosp
-    for repo in django-performance-testing django-currentuser django-act-as-auth django-admin-caching django-httpxforwardedfor; do
-        target=~/${repo}
-        if [[ ! -d ${target} ]]; then
-           git clone git@github.com:${ACCOUNT}/${repo}.git ${target}
-        fi
-        cd ${target}
-    #  /home/vagrant/.local/bin/pre-commit install
-    done
+    TRACE=1 /vagrant/python.sh
   SOURCE_CODE
 
   config.vm.provider :virtualbox do |vb|
@@ -191,5 +174,5 @@ Vagrant.configure("2") do |config|
     vb.memory = 1024 * 4
     vb.cpus = 4
   end
-
+_
 end
